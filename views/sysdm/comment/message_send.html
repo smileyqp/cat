@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>消息发送</title>
+{js:jquery}
+{js:dialog}
+{js:validate}
+{js:kindeditor}
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body style="width:720px;min-height:460px;">
+<div class="container">
+<form action="{url:/comment/start_message}" method="post">
+	<input type='hidden' name='toUser' value='' />
+
+	<div class="form-group">
+	    <h5>
+	    	收信人：
+	    	<button onclick='searchUser();' class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span> 筛选条件</button>
+			<span class="text-muted" id='queryString'>【默认为所有用户】</span>
+	    </h5>
+	</div>
+	<hr />
+
+	<div class="form-group">
+		<input class="form-control" type="text" name="title" />
+	</div>
+
+	<div class="form-group">
+		<textarea name="content" id="content" style="width:100%;height:300px;"></textarea>
+	</div>
+</form>
+</div>
+
+<script type='text/javascript'>
+var kindEditorObj;
+
+$(function(){
+	//编辑器载入
+	KindEditor.ready(function(K){
+		kindEditorObj = K.create('#content');
+	});
+});
+
+//筛选用户
+function searchUser()
+{
+	art.dialog.open('{url:/member/search_user}',{
+		'id':'userCondition',
+		'title':'选择用户',
+		'ok':function(iframeWin, topWin)
+		{
+			var iframeObj = $(iframeWin.document);
+	    	iframeObj.find('form').submit();
+	    	return false;
+		}
+	});
+}
+</script>
+</body>
+</html>

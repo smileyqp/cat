@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商家检索</title>
+{js:jquery}
+{js:dialog}
+{js:validate}
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body style="width:520px;min-height:270px;overflow-y:hidden;">
+<div class="container">
+	<form action='{url:/member/filter_seller}' method='post'>
+		<table class='table'>
+			<colgroup>
+				<col width="150px" />
+				<col />
+			</colgroup>
+
+			<tbody>
+				<tr>
+					<td>商户：</td>
+					<td>
+						<select class="form-control" name="search[id]">
+							<option value="">请选择 </option>
+                            {foreach:items=Api::run('getSellerListAll')}
+							<option value="{$item['id']}">{$item['true_name']}-{$item['seller_name']}</option>
+							{/foreach}
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>商户用户名：</td>
+					<td><input type='text' class='form-control' name='search[seller_name]' /></td>
+				</tr>
+				<tr>
+					<td>商户固定电话：</td>
+					<td><input type='text' class='form-control' name='search[phone]' pattern="phone" empty /></td>
+				</tr>
+				<tr>
+					<td>商户手机号码：</td>
+					<td><input type='text' class='form-control' name='search[mobile]' pattern="mobi" empty /></td>
+				</tr>
+				<tr>
+					<td>商户邮箱：</td>
+					<td><input type='text' class='form-control' name='search[email]' pattern='email' empty /></td>
+				</tr>
+				<tr>
+					<td>商户真实名称：</td>
+					<td><input type='text' class='form-control' name='search[true_name]' /></td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</div>
+</body>
+</html>

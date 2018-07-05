@@ -1,0 +1,64 @@
+{set:$items=$this->comment;}
+<div class="breadcrumbs" id="breadcrumbs">
+	<ul class="breadcrumb">
+		<li>
+			<i class="home-icon fa fa-home"></i>
+			<a href="#">会员</a>
+		</li>
+		<li>
+			<a href="{url:/comment/comment_list}">评价管理</a>
+		</li>
+		<li class="active">查看评论</li>
+	</ul>
+</div>
+<div class="content">
+	<form action="{url:/comment/comment_update}" method="post" name="comment_edit">
+		<input type="hidden" value="{$items['id']}" name="id" />
+		<table class="table form-table">
+			<colgroup>
+				<col width="130px" />
+				<col />
+			</colgroup>
+
+			<tr>
+				<th>评论人：</th>
+				<td><a href="{url:/member/member_edit/uid/$items['user_id']}">{$items['username']}</a></td>
+			</tr>
+			<tr>
+				<th>购买时间：</th><td>{$items['time']}</td>
+			</tr>
+			<tr>
+				<th>评价商品：</th><td><a href="{url:/goods/products/id/$items['goods_id']}" target="_blank">{$items['name']}</a></td>
+			</tr>
+			<tr>
+				<th>评价时间：</th><td>{$items['comment_time']}</td>
+			</tr>
+			<tr>
+				<th>评价内容：</th><td>{$items['contents']}</td>
+			</tr>
+			<tr>
+				<th>评价分数：</th><td>{$items['point']}分</td>
+			</tr>
+			{if:$items['seller_id']}
+			<tr><th>商家：</th><td><a href="{url:/site/home/id/$items['seller_id']}" target="_blank">商家主页</a></td></tr>
+			{/if}
+			<tr>
+				<th>回复评价：</th>
+				<td><textarea class='form-control' name='recontents' style='height:200px'>{$items['recontents']}</textarea></td>
+			</tr>
+			{if:$items['recomment_time']>0}
+			<tr>
+				<th>最后回复时间</th>
+				<td>{$items['recomment_time']}</td>
+			</tr>
+			{/if}
+			<tr>
+				<th></th>
+				<td>
+					<button type='submit' class='btn btn-primary'>确定</button>
+					<button type='reset' class='btn btn-primary'>重置</button>
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>

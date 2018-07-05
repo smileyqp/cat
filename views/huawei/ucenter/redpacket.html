@@ -1,0 +1,34 @@
+<header class="uc_head">
+	<h3>我的代金券</h3>
+</header>
+
+{set:$queryPropList = Api::run('getPropList')}
+{set:$queryProp = $queryPropList->find()}
+{if:$queryProp}
+<section class="uc_table">
+	<table>
+		<thead>
+			<tr>
+				<th>编号</th>
+				<th>面值</th>
+				<th>有效时间</th>
+				<th>状况</th>
+			</tr>
+		</thead>
+		<tbody>
+			{foreach:items = $queryProp}
+			<tr>
+				<td>{$item['card_name']}</td>
+				<td>{$item['value']}元</td>
+				<td>{echo:substr($item['end_time'],0,16)}</td>
+				<td class="blue">{echo:ticket::statusText(ticket::status($item))}</td>
+			</tr>
+			{/foreach}
+		</tbody>
+	</table>
+</section>
+{else:}
+<section class="no_tip">暂无数据</section>
+{/if}
+
+{$queryPropList->getPageBar()}

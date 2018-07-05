@@ -1,0 +1,66 @@
+<div class="bigweb">
+<section class="breadcrumb">
+	<span>您当前的位置：</span> <a href="{url:}">首页</a> » <a href="{url:/site/products/id/$this->goods['goods_id']}">{$this->goods['name']}</a>
+</section>
+
+
+<section class="web">
+	<section class="main">
+		<h2 class="main_head">我要评论</h2>
+		<section class="user_form">
+			<form method="post" action="{url:/site/comment_add}">
+				<input type="hidden" name="id" value="{$this->comment['id']}" />
+				<dl>
+					<dt>评论等级：</dt>
+					<dd>
+						<label class="star_box fl">
+							<input name="point" class="radio" type="radio" value="5" checked="checked" />
+							<span class="star star_5"></span>
+						</label>
+						<label class="star_box fl">
+							<input name="point" class="radio" type="radio" value="4" />
+							<span class="star star_4"></span>
+						</label>
+						<label class="star_box fl">
+							<input name="point" class="radio" type="radio" value="3" />
+							<span class="star star_3"></span>
+						</label>
+						<label class="star_box fl">
+							<input name="point" class="radio" type="radio" value="2" />
+							<span class="star star_2"></span>
+						</label>
+						<label class="star_box fl">
+							<input name="point" class="radio" type="radio" value="1" />
+							<span class="star star_1"></span>
+						</label>
+					</dd>
+				</dl>
+				<dl>
+					<dt>评论内容：</dt>
+					<dd><textarea class="input_textarea" name='contents' pattern='required' alt=''></textarea></dd>
+				</dl>
+				<dl>
+					<dt></dt>
+					<dd><input class="input_submit" type="submit" value="我要评价" /></dd>
+				</dl>
+			</form>
+		</section>
+	</section>
+	<aside class="bar">
+		<div class="bar_box">
+			<h3 class="bar_box_head">商品信息</h3>
+			<div class="bar_goods_big">
+				<a target="_blank" href="{url:/site/products/id/$this->goods['goods_id']}">
+					<img alt="{$this->goods['name']}" src="{url:/pic/thumb/img/$this->goods['img']/w/180/h/180}">
+					<h5>{$this->goods['name']}</h5>
+					<em>￥{$this->goods['sell_price']}</em>
+					<label class="star_box">
+						<span class="item">评分</span>
+						<span class="star star_{echo:Common::gradeWidth($this->commentCount['average_point'])}"></span>
+					</label>
+				</a>
+			</div>
+		</div>
+	</aside>
+</section>
+</div>

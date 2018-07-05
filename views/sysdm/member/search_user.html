@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>检索用户</title>
+{js:jquery}
+{js:validate}
+{js:dialog}
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body style="width:520px;min-height:270px;overflow-y:hidden;">
+<div class="container">
+	<form action='{url:/member/filter_user}' method='post'>
+		<table class='table'>
+			<colgroup>
+				<col width="150px" />
+				<col />
+			</colgroup>
+
+			<tbody>
+				<tr>
+					<td>用户名：</td>
+					<td><input type='text' class='form-control' name='search[u.username]' /></td>
+				</tr>
+				<tr>
+					<td>邮箱：</td>
+					<td><input type='text' class='form-control' name='search[m.email]' pattern='email' empty /></td>
+				</tr>
+				<tr>
+					<td>用户组：</td>
+					<td>
+						<select class="form-control" name="search[m.group_id]">
+							<option value=''>请选择</option>
+                            {foreach:items=Api::run('getUserGroupListAll')}
+							<option value="{$item['id']}">{$item['group_name']}</option>
+							{/foreach}
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>真实姓名：</td>
+					<td><input type='text' class='form-control' name='search[m.true_name]' /></td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</div>
+</body>
+</html>

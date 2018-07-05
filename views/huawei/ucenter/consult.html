@@ -1,0 +1,54 @@
+<header class="uc_head">
+	<h3>商品咨询</h3>
+</header>
+
+{set:$queryConsultList = Api::run('getUcenterConsult')}
+{set:$queryConsult = $queryConsultList->find()}
+{if:$queryConsult}
+<section class="uc_table">
+	<table>
+		<col width="160">
+		<col>
+		<col width="80">
+		<col width="60">
+		<thead>
+			<tr>
+				<th>商品名称</th><th>内容</th><th>咨询时间</th><th>回复</th>
+			</tr>
+		</thead>
+		<tbody>
+			{foreach:items = $queryConsult}
+			<tr>
+				<td><a href="{url:/site/products/id/$item[gid]}" target="_black">{$item['name']}</a></td>
+				<td>{$item['question']}</td>
+				<td>{echo:substr($item['time'],0,10)}</td>
+				<td>{if:$item['status']==1}<span class="blue" onclick='show_msg(this, {echo:JSON::encode($item)} )'>查看</span>{else:}未回复{/if}</td>
+			</tr>
+			{/foreach}
+			<tr id='show_msg' class="" style="display:none">
+				<td colspan="4">
+					<div class="show_message">
+						<div class="close" onclick='$("#show_msg").hide();'></div>
+						<strong>商家在 <span id="reply_time"></span> 给您做了如下解答：</strong>
+						<p id='answer'></p>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</section>
+{else:}
+<section class="no_tip">暂无数据</section>
+{/if}
+
+<script>
+function show_msg(_self,obj){
+	$('#show_msg').insertAfter($(_self).parent().parent());
+	$('#show_msg').show();
+	obj.answer ? $('#show_msg').show() : $('#show_msg').hide();
+	for(var i in obj)
+	{
+		$('#show_msg #'+i).text(obj[i]);
+	}
+}
+</script>

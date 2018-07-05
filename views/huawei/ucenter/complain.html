@@ -1,0 +1,80 @@
+<header class="uc_head">
+	<h3>建议列表</h3>
+</header>
+
+{set:$querySuggestionList = Api::run('getUcenterSuggestion')}
+{set:$querySuggestion = $querySuggestionList->find()}
+{if:$querySuggestion}
+<section class="uc_table">
+	<table>
+		<thead>
+			<tr>
+				<th>建议主题</th><th width="200">添加时间</th><th width="100">状态</th><th width="100">查看</th>
+			</tr>
+		</thead>
+		<tbody>
+			{foreach:items = $querySuggestion}
+			<tr>
+				<td align="left">{$item['title']}</td>
+				<td>{$item['time']}</td>
+				<td>{if:$item['re_content']!=''}<span class="green">已回复</span>{else:}<span>未回复</span>{/if}</td>
+				<td><a class="blue" onclick='show_msg(this,{echo:JSON::encode($item)})'>查看</a></td>
+			</tr>
+			{/foreach}
+			<tr id='show_msg' class="show" style="display:none">
+							<td colspan="4">
+								<div class="show_message">
+						<div class="close" onclick='$("#show_msg").hide();'></div>
+						<strong id='title'></strong>
+						<p id='content'></p>
+						<div id="re_info">
+							<strong><span id='admin'>{echo:$this->_siteConfig->name}</span>在 [<span id='re_time'></span>] 回复:</strong>
+							<p id='re_content'></p>
+						</div>
+					</div>
+				</td>
+					</tr>
+		</tbody>
+	</table>
+</section>
+{else:}
+<section class="no_tip">暂无数据</section>
+{/if}
+{$querySuggestionList->getPageBar()}
+
+<header class="uc_head">
+	<h3>我要建议</h3>
+</header>
+
+<section class="user_form">
+	<form action="{url:/ucenter/complain_edit}" method="post" >
+		<dl>
+			<dt>建议标题：</dt>
+			<dd>
+				<input name="title" type="text" pattern='required' alt='标题不能为空' class="input_text" />
+				<label>*标题不能为空</label>
+			</dd>
+		</dl>
+		<dl>
+			<dt>建议内容：</dt>
+			<dd><textarea class="input_textarea" name='content' pattern='required' alt=''></textarea></dd>
+		</dl>
+		<dl>
+			<dt></dt>
+			<dd><input class="input_submit" type="submit" value="提交建议" /></dd>
+		</dl>
+	</form>
+</section>
+
+
+<script>
+function show_msg(_self,obj){
+	$('#show_msg').insertAfter($(_self).parent().parent());
+	$('#show_msg').show();
+	obj.re_content ? $('#show_msg #re_info').show() : $('#show_msg #re_info').hide();
+	for(var i in obj)
+	{
+		$('#show_msg #'+i).text(obj[i]);
+	}
+}
+</script>

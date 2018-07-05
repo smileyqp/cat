@@ -1,0 +1,70 @@
+<header class="uc_head">
+	<h3>个人积分</h3>
+	<span class="money">您当前的积分：<em>{$this->memberRow['point']}</em> 分</span>
+</header>
+
+{set:$queryPointLog = Api::run('getUcenterPointLog')}
+{set:$queryPoint = $queryPointLog->find()}
+{if:$queryPoint}
+<section class="uc_table">
+	<table>
+		<thead>
+			<tr>
+				<th class="tl">积分日期</th>
+				<th class="tl">积分</th>
+				<th class="tl">说明</th>
+			</tr>
+		</thead>
+		<tbody>
+			{foreach:items = $queryPoint}
+			<tr>
+				<td class="tl">{$item['datetime']}</td>
+				<td class="tl">{$item['value']}分</td>
+				<td class="tl"><span class="uc_high_light">{$item['intro']}</span></td>
+			</tr>
+			{/foreach}
+		</tbody>
+	</table>
+</section>
+{else:}
+<section class="no_tip">暂无数据</section>
+{/if}
+
+{$queryPointLog->getPageBar()}
+<header class="uc_head">
+	<h3>积分兑换</h3>
+</header>
+
+<section class="user_form">
+	{set:$ticketData = Api::run('getTicketList');}
+	{foreach:items=$ticketData}
+	<form action='{url:/ucenter/trade_ticket}' method='post'>
+	<div class="coupon-item">
+		<div class="style">
+			<div class="info-box">
+				<p class="nick">{$item['name']}</p>
+				<div class="coupon-money">
+					<div class="lay of">￥<em>{$item['value']}</em></div>
+					<div class="lay">
+						<p class="tit">需要{$item['point']}积分</p>
+						<p class="demand">有效日期：{$item['start_time']}至{$item['end_time']}</p>
+					</div>
+				</div>
+			</div>
+			<a href="javascript:;" class="get-btn">
+				<input type="hidden" name='ticket_id' value="{$item['id']}" />
+				<input type="submit" value="立即兑换" />
+			</a>
+		</div>
+	</div>
+	</form>
+	{/foreach}
+	{if:!$ticketData}
+	<section class="no_tip">暂无代金券</section>
+	{/if}
+</section>
+<div class="prompt">
+	<p><strong>提示：</strong></p>
+	<p class="indent">1、您兑换的代金券为电子券，根据代金券的不同，会具有不同的有效期</p>
+	<p class="indent">2、电子代金券仅限本ID使用，不能折算为现金、也不能再次兑换为积分</p>
+</div>

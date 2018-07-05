@@ -1,0 +1,134 @@
+<div class="breadcrumbs" id="breadcrumbs">
+	<ul class="breadcrumb">
+		<li>
+			<i class="home-icon fa fa-home"></i>
+			<a href="#">订单</a>
+		</li>
+		<li>
+			<a href="#">单据管理</a>
+		</li>
+		<li class="active">退款单申请信息</li>
+	</ul>
+</div>
+
+<div class="content">
+	<form method="post" action="{url:/order/refundment_doc_show_save}">
+		<input type="hidden" name="id" value="{$id}"/>
+		<table class="table form-table">
+			<colgroup>
+				<col width="130px" />
+				<col />
+			</colgroup>
+
+			<tbody>
+				<tr>
+					<th>订单号：</th>
+					<td>{$order_no}</td>
+				</tr>
+				<tr>
+					<th>退款商品：</th>
+					<td>
+						{foreach:items=Api::run('getOrderGoodsRowById',array('id'=>$order_goods_id))}
+						{set:$goods = JSON::decode($item['goods_array'])}
+						<p>
+							{$goods['name']} X {$item['goods_nums']}件
+							<span class="text-green">【{echo:Order_Class::goodsSendStatus($item['is_send'])}】</span>
+							【商品金额：￥{echo:$item['goods_nums']*$item['real_price']}】
+							{if:$seller_id}
+							<a href="{url:/site/home/id/$seller_id}" target="_blank"><i class='operator fa fa-user'></i></a>
+							{/if}
+						</p>
+						{/foreach}
+					</td>
+				</tr>
+				<tr>
+					<th>用户名：</th><td>
+					{set:$user = Api::run('getMemberInfo',$user_id)}
+					{$user['username']}
+					</td>
+				</tr>
+				<tr>
+					<th>联系方式：</th><td>{$user['mobile']}</td>
+				</tr>
+				<tr>
+					<th>申请时间：</th><td>{$time}</td>
+				</tr>
+				<tr>
+					<th>退款原因：</th><td>{$content}</td>
+				</tr>
+				<tr>
+					<th>处理：</th>
+					<td>
+                        <label class="radio-inline">
+                            <input type="radio" name="pay_status" value="2" checked=checked >同意
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="pay_status" value="1">拒绝
+                        </label>
+					</td>
+				</tr>
+				<tr>
+					<th>处理意见：</th>
+					<td>
+						<textarea name="dispose_idea" class="form-control"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<th></th>
+					<td><button type="submit" class="btn btn-primary" onclick="return checkForm()">确定</button></td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</div>
+
+<script type="text/javascript">
+//退款
+function refundment(id,refundsId)
+{
+	var tempUrl = '{url:/order/order_refundment/id/@id@/refunds_id/@refunds_id@}';
+	tempUrl     = tempUrl.replace('@id@',id).replace('@refunds_id@',refundsId);;
+	art.dialog.open(tempUrl,{
+		id:'refundment',
+		cancelVal:'关闭',
+		okVal:'退款',
+	    title: '订单号:{$order_no}退款',
+	    ok:function(iframeWin, topWin){
+	    	var formObject = iframeWin.document.forms[0];
+	    	if(formObject.onsubmit() == false)
+	    	{
+	    		return false;
+	    	}
+	    	formObject.submit();
+	    	return false;
+	    },
+	    cancel:function(){
+	    	return true;
+		}
+	});
+}
+
+//执行回调处理
+function actionCallback(msg)
+{
+	if(msg)
+	{
+		alert(msg);
+		window.history.go(-1);
+		return;
+	}
+	document.forms[0].submit();
+}
+
+//表单提交
+function checkForm()
+{
+	var payValue = $('[name="pay_status"]:checked').val();
+	if(payValue == 2)
+	{
+		refundment({$order_id},{$id});
+		return false;
+	}
+	return true;
+}
+</script>
